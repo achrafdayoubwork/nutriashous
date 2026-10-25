@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2f9e6e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="NutriASHous" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <!-- Phone-sized screens get the app layout; set before first paint to avoid a layout jump -->
+  <script>if (matchMedia("(max-width: 760px)").matches) document.documentElement.classList.add("is-app");</script>
+  <title>NutriASHous — الحمية والصحة</title>
+  <meta name="description" content="خطوتان: احسب سعراتك واحتياجك من البروتين والكربوهيدرات والدهون، ثم احصل على خطة وجبات تناسبها." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="nav" id="top">
+    <div class="container nav-inner">
+      <a href="#top" class="logo">🥗 Nutri<span>ASH</span>ous</a>
+      <nav class="nav-links steps-nav" aria-label="Steps" data-i18n-aria="nav.steps">
+        <a href="#calculator"><span class="step-num">1</span> <span data-i18n="nav.calc">Calculator</span></a>
+        <span class="step-arrow" aria-hidden="true"></span>
+        <a href="#meals" id="nav-step2"><span class="step-num">2</span> <span data-i18n="nav.meals">Meal Planner</span></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span aria-hidden="true">|</span>
+        <button type="button" data-lang="ar" aria-pressed="false">AR</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Calculator -->
+  <section class="section alt" id="calculator" data-screen="calc">
+    <div class="container">
+      <div class="section-head">
+        <p class="step-badge" data-i18n="step1">Step 1 of 2</p>
+        <h2 data-i18n="calc.title">Calorie & Macro Calculator</h2>
+        <p data-i18n="calc.intro">Uses the Mifflin–St Jeor equation, the most widely used estimate of daily energy needs.</p>
+      </div>
+
+      <div class="calc-grid">
+        <form id="calc-form" class="card calc-form">
+          <div class="field">
+            <label data-i18n="calc.sex">Sex</label>
+            <div class="toggle-group">
+              <input type="radio" id="male" name="sex" value="male" checked />
+              <label for="male" data-i18n="calc.male">Male</label>
+              <input type="radio" id="female" name="sex" value="female" />
+              <label for="female" data-i18n="calc.female">Female</label>
+            </div>
+          </div>
+
+          <div class="units-row">
+            <span class="units-label" data-i18n="calc.units">Units:</span>
+            <div class="unit-toggle" role="group" aria-label="Weight unit" data-i18n-aria="calc.weightUnit">
+              <button type="button" data-unit="w" data-val="kg" aria-pressed="true" data-i18n="unit.kg">kg</button>
+              <button type="button" data-unit="w" data-val="lb" aria-pressed="false" data-i18n="unit.lb">lb</button>
+            </div>
+            <div class="unit-toggle" role="group" aria-label="Height unit" data-i18n-aria="calc.heightUnit">
+              <button type="button" data-unit="h" data-val="cm" aria-pressed="true" data-i18n="unit.cm">cm</button>
+              <button type="button" data-unit="h" data-val="ft" aria-pressed="false" data-i18n="unit.ftin">ft / in</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="age" data-i18n="calc.age">Age</label>
+              <input type="number" id="age" min="18" max="100" placeholder="30" inputmode="numeric" required />
+            </div>
+            <div class="field" id="height-field">
+              <label for="height" id="height-label"><span data-i18n="calc.height">Height</span> <span class="unit-hint" id="height-unit">(cm)</span></label>
+              <input type="number" id="height" min="120" max="230" placeholder="175" inputmode="numeric" required />
+              <div class="ftin" id="height-ftin" hidden>
+                <input type="number" id="height-ft" min="4" max="7" placeholder="5" inputmode="numeric" aria-label="Feet" data-i18n-aria="unit.feet" disabled />
+                <span data-i18n="unit.ft">ft</span>
+                <input type="number" id="height-in" min="0" max="11" placeholder="9" inputmode="numeric" aria-label="Inches" data-i18n-aria="unit.inches" disabled />
+                <span data-i18n="unit.in">in</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="weight"><span data-i18n="calc.weight">Weight</span> <span class="unit-hint" id="weight-unit">(kg)</span></label>
+              <input type="number" id="weight" min="35" max="300" step="0.1" placeholder="75" inputmode="decimal" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="activity" data-i18n="calc.activity">Activity level</label>
+            <select id="activity">
+              <option value="1.2" data-i18n="act.1">Sedentary — little or no exercise</option>
+              <option value="1.375" data-i18n="act.2">Light — exercise 1–3 days/week</option>
+              <option value="1.55" selected data-i18n="act.3">Moderate — exercise 3–5 days/week</option>
+              <option value="1.725" data-i18n="act.4">Active — exercise 6–7 days/week</option>
+              <option value="1.9" data-i18n="act.5">Very active — physical job or 2x/day training</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label data-i18n="calc.goal">Goal</label>
+            <div class="toggle-group three">
+              <input type="radio" id="lose" name="goal" value="lose" />
+              <label for="lose" data-i18n="goal.lose">Lose fat</label>
+              <input type="radio" id="maintain" name="goal" value="maintain" checked />
+              <label for="maintain" data-i18n="goal.maintain">Maintain</label>
+              <input type="radio" id="gain" name="goal" value="gain" />
+              <label for="gain" data-i18n="goal.gain">Build muscle</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-i18n="calc.keto">Eating style</label>
+            <div class="toggle-group">
+              <input type="radio" id="keto-no" name="keto" value="no" checked />
+              <label for="keto-no" data-i18n="keto.no">Regular (balanced)</label>
+              <input type="radio" id="keto-yes" name="keto" value="yes" />
+              <label for="keto-yes" data-i18n="keto.yes">Keto</label>
+            </div>
+            <p class="field-note" id="keto-note" data-i18n="calc.ketoHint" hidden>Keto: under 50g of carbs a day (about 30g), the rest from fat. Check with your doctor first if you take diabetes medication, are pregnant, or have kidney problems.</p>
+          </div>
+
+          <p class="step-hint" id="step-hint" role="status"></p>
+          <button type="submit" class="btn btn-block" data-i18n="calc.submit">Calculate</button>
+        </form>
+
+        <div class="card results" id="results" aria-live="polite">
+          <div class="result-main">
+            <p class="muted" data-i18n="res.target">Your daily target</p>
+            <p class="big"><span id="r-calories">—</span> <small data-i18n="unit.kcal">kcal</small></p>
+            <p class="muted small">
+              <span data-i18n="res.maint">Maintenance:</span> <span id="r-tdee">—</span> <span data-i18n="unit.kcal">kcal</span> ·
+              <span data-i18n="res.bmr">BMR:</span> <span id="r-bmr">—</span> <span data-i18n="unit.kcal">kcal</span>
+            </p>
+          </div>
+
+          <div class="macros">
+            <div class="macro protein">
+              <span class="macro-label" data-i18n="macro.protein">Protein</span>
+              <span class="macro-val" id="r-protein">—</span>
+            </div>
+            <div class="macro carbs">
+              <span class="macro-label" data-i18n="macro.carbs">Carbs</span>
+              <span class="macro-val" id="r-carbs">—</span>
+            </div>
+            <div class="macro fat">
+              <span class="macro-label" data-i18n="macro.fat">Fat</span>
+              <span class="macro-val" id="r-fat">—</span>
+            </div>
+          </div>
+          <div class="macro-bar" aria-hidden="true">
+            <span class="protein" id="bar-protein"></span>
+            <span class="carbs" id="bar-carbs"></span>
+            <span class="fat" id="bar-fat"></span>
+          </div>
+
+          <div class="result-extra">
+            <div>
+              <p class="muted small" data-i18n="res.bmi">BMI</p>
+              <p class="mid"><span id="r-bmi">—</span> <span class="tag" id="r-bmi-cat"></span></p>
+            </div>
+            <div>
+              <p class="muted small" data-i18n="res.water">Water</p>
+              <p class="mid"><span id="r-water">—</span> <span data-i18n="unit.lday">L/day</span></p>
+            </div>
+          </div>
+          <p class="disclaimer" data-i18n="res.disclaimer">Estimates only. Talk to a doctor or registered dietitian before major diet changes.</p>
+          <details class="sources">
+            <summary data-i18n="res.sources">How these numbers are calculated</summary>
+            <ul>
+              <li data-i18n="src.energy">Calories: Mifflin–St Jeor equation (Mifflin et al., American Journal of Clinical Nutrition, 1990), multiplied by your activity level.</li>
+              <li data-i18n="src.protein">Protein: International Society of Sports Nutrition (2017): 1.4–2.0 g per kg for people who exercise. Above a BMI of 25 it is based on the weight at BMI 25.</li>
+              <li data-i18n="src.amdr">Macro split: US Institute of Medicine ranges: protein 10–35%, fat 20–35%, carbs 45–65% of calories.</li>
+              <li data-i18n="src.bmi">BMI: World Health Organization categories (18.5 / 25 / 30).</li>
+              <li data-i18n="src.water">Water: US National Academies (3.7 L men, 2.7 L women of total water; about 80% of it from drinks).</li>
+              <li data-i18n="src.keto">Keto: under 50 g of carbs a day.</li>
+            </ul>
+          </details>
+          <button type="button" class="btn btn-block next-step" id="next-step" disabled>Next: plan my meals →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meal plans -->
+  <section class="section" id="meals" data-screen="meals">
+    <div class="container">
+      <div class="section-head">
+        <p class="step-badge" data-i18n="step2">Step 2 of 2</p>
+        <h2 data-i18n="meals.title">Smart Meal Planner</h2>
+        <p data-i18n="meals.intro">Using your results from step 1, answer a few quick questions and get a 7-day meal plan, with different meals every day, that fits your calories, protein, carbs and fat, and the foods you can and can't eat.</p>
+      </div>
+      <div class="planner card" id="planner" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> NutriASHous. <span data-i18n="footer.built">Built for healthier everyday eating.</span></p>
+      <p class="small" data-i18n="footer.note">Information on this site is for general education and is not medical advice.</p>
+    </div>
+  </footer>
+
+  <!-- Bottom tab bar (phone app layout only) -->
+  <nav class="tabbar" aria-label="App navigation" data-i18n-aria="tabbar.label">
+    <button type="button" data-tab="calc" aria-current="page"><span class="tab-ico" aria-hidden="true">🔢</span><span data-i18n="tabbar.calc">1. Calculator</span></button>
+    <button type="button" data-tab="meals" id="tab-step2"><span class="tab-ico" aria-hidden="true">🍽️</span><span data-i18n="tabbar.meals">2. Meals</span></button>  </nav>
+  <!-- Feedback widget (drag the button to move it) -->
+  <button class="fb-fab" id="fb-fab" aria-label="Leave feedback" aria-expanded="false" aria-controls="fb-panel" title="Leave feedback (drag to move)" data-i18n-aria="fb.open" data-i18n-title="fb.openTitle">💬</button>
+  <div class="fb-panel" id="fb-panel" role="dialog" aria-labelledby="fb-title" hidden>
+    <div class="fb-head">
+      <h3 id="fb-title" data-i18n="fb.title">Share your feedback</h3>
+      <button class="fb-close" id="fb-close" aria-label="Close feedback" data-i18n-aria="fb.close">×</button>
+    </div>
+    <form name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="fb-form">
+      <input type="hidden" name="form-name" value="feedback" />
+      <p hidden><label>Leave this empty: <input name="bot-field" /></label></p>
+      <fieldset class="fb-rating">
+        <legend data-i18n="fb.rating">How do you like the site?</legend>
+        <input type="radio" id="fb-r1" name="rating" value="1 - Bad" /><label for="fb-r1" title="Bad" data-i18n-title="fb.r1">😞</label>
+        <input type="radio" id="fb-r2" name="rating" value="2 - Meh" /><label for="fb-r2" title="Meh" data-i18n-title="fb.r2">😕</label>
+        <input type="radio" id="fb-r3" name="rating" value="3 - Okay" /><label for="fb-r3" title="Okay" data-i18n-title="fb.r3">😐</label>
+        <input type="radio" id="fb-r4" name="rating" value="4 - Good" /><label for="fb-r4" title="Good" data-i18n-title="fb.r4">🙂</label>
+        <input type="radio" id="fb-r5" name="rating" value="5 - Love it" /><label for="fb-r5" title="Love it" data-i18n-title="fb.r5">😍</label>
+      </fieldset>
+      <label for="fb-message" class="fb-label" data-i18n="fb.message">Your message</label>
+      <textarea id="fb-message" name="message" rows="4" required placeholder="What should we add or improve?" data-i18n-placeholder="fb.placeholder"></textarea>
+      <label for="fb-email" class="fb-label" data-i18n="fb.email">Email <span class="muted">(optional, if you'd like a reply)</span></label>
+      <input type="email" id="fb-email" name="email" placeholder="you@example.com" />
+      <button type="submit" class="btn btn-block" id="fb-submit" data-i18n="fb.send">Send feedback</button>
+      <p class="fb-error" id="fb-error" hidden></p>
+    </form>
+    <div class="fb-thanks" id="fb-thanks" hidden>
+      <p class="fb-thanks-icon">🎉</p>
+      <p data-i18n="fb.thanks"><strong>Thank you!</strong><br />Your feedback helps make NutriASHous better.</p>
+      <button class="btn btn-outline btn-small" id="fb-again" data-i18n="fb.again">Send another</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
